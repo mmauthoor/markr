@@ -15,15 +15,12 @@ app.use(xmlparser({
 app.post("/import", (req, res) => {
 
     // Need to check this is the correct xml content type as per brief.
+    // Need to screen for other kinds of markr xml files (i.e. not results) here.
     let results = req.body["mcq-test-results"]["mcq-test-result"];
-  
-    if (results) {
-        console.log(results)
-        Result.create(results);
-        res.send("sent to db successfully");
-    } else {
-        // catch error
-    }
+    results = results.length > 1 ? results : [results];
+    Result.create(results);
+    res.send("sent to db successfully");
+
 });
 
 app.get("/results/:testId/aggregate", (req, res) => {
